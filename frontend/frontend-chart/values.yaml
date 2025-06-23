@@ -1,0 +1,76 @@
+replicaCount: 1
+
+image:
+  repository: your-acr.azurecr.io/nginx
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: LoadBalancer
+  port: 3000
+  targetPort: 3000
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: amanpathakdevops.study
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: frontend-frontend-chart
+              port:
+                number: 3000
+  tls: []
+
+
+resources:
+  limits:
+    cpu: 300m
+    memory: 300Mi
+  requests:
+    cpu: 300m
+    memory: 300Mi
+
+# livenessProbe:
+#   httpGet:
+#     path: /
+#     port: 3000
+#   initialDelaySeconds: 30
+#   periodSeconds: 10
+
+# readinessProbe:
+#   httpGet:
+#     path: /
+#     port: 3000
+#   initialDelaySeconds: 5
+#   periodSeconds: 10
+
+autoscaling:
+  enabled: false
+
+volumes: []
+volumeMounts: []
+nodeSelector: {}
+tolerations: []
+affinity: {}
