@@ -1,0 +1,24 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS metadata
+.DS_Store
+
+# Environment files
+.env
+
+# Ignore all .ts files globally
+*.ts
+
+# Optional: allow .ts files in specific folders
+!src/**/*.ts
+
