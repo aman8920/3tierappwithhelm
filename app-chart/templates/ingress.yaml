@@ -1,0 +1,27 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.ingress.name | default "twsmainlbingress" }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.ingress.backendServiceName }}
+                port:
+                  number: {{ .Values.ingress.backendServicePort }}
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.ingress.frontendServiceName }}
+                port:
+                  number: {{ .Values.ingress.frontendServicePort }}
+{{- end }}

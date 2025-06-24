@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    role: {{ .Values.labels.role }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      role: {{ .Values.labels.role }}
+  template:
+    metadata:
+      labels:
+        role: {{ .Values.labels.role }}
+    spec:
+      containers:
+        - name: {{ .Values.deployment.name }}-container
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: DB_TYPE
+              value: {{ .Values.env.DB_TYPE | quote }}
+            - name: DB_HOST
+              value: {{ .Values.env.DB_HOST | quote }}
+            - name: DB_PORT
+              value: {{ .Values.env.DB_PORT | quote }}
+            - name: DB_NAME
+              value: {{ .Values.env.DB_NAME | quote }}
+            - name: DB_SSL
+              value: {{ .Values.env.DB_SSL | quote }}
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.dbSecret.name }}
+                  key: {{ .Values.dbSecret.usernameKey }}
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.dbSecret.name }}
+                  key: {{ .Values.dbSecret.passwordKey }}
+          ports:
+            - containerPort: {{ .Values.deployment.containerPort }}

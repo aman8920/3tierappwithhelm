@@ -1,0 +1,10 @@
+namespace: tws1-three-tier
+
+ingress:
+  enabled: true
+  name: twsmainlbingress
+  host: backend.amanpathakdevops.study
+  backendServiceName: twsapibackendservice
+  backendServicePort: 3500
+  frontendServiceName: twsfrontend-service
+  frontendServicePort: 80

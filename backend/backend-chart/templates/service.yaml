@@ -3,12 +3,11 @@ kind: Service
 metadata:
   name: {{ .Values.service.name }}
   namespace: {{ .Release.Namespace }}
-  labels:
-    {{- toYaml .Values.labels | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
-  selector:
-    {{- toYaml .Values.labels | nindent 4 }}
   ports:
     - port: {{ .Values.service.port }}
+      protocol: TCP
       targetPort: {{ .Values.service.targetPort }}
+  selector:
+    role: {{ .Values.labels.role }}
